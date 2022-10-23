@@ -5,6 +5,7 @@
 #include<sstream>
 #include<utility>
 #include<cstdio>
+#include<time.h>
 
 using namespace std;
 using t_v = long long;
@@ -47,22 +48,27 @@ vector<Item> input(string fpath ) {
             values.push_back(stol(separeted_string_buffer));
         }
 
-        values[1] /= 10;
-
         items.push_back(Item(values[0], values[1], values[2], values[3]));
     } 
 
     return items; 
 }
 
-int main()
+int main(int argc, char** args)
 {
     string fpath = "extend2_menu_hot_20170509.dat";
+    t_v SUMP = 20000;
+    long long sumCells = 0;
+
+    if ( argc >= 2 ) SUMP = atol(args[1]);
+    if ( argc >= 3 ) fpath = string(args[2]);
+
     vector<Item> items;
-    const t_v SUMP = 250000;
 
     items = input(fpath);   
 
+    time_t strat = clock();
+    
     vector<vector<pair<t_v, int>>> dp(items.size(), vector<pair<t_v, int>>(SUMP+1, make_pair(0, 0)));
 
     for ( t_v p = 1; p <= SUMP; ++p ) {
@@ -72,13 +78,14 @@ int main()
     } 
 
     for ( int i = 1; i < items.size(); ++i ) {
-        cout << "i = " << i << endl;
+        cout << "\ri = " << i << flush; 
         for ( t_v p = 1; p <= SUMP; ++p ) {
             for ( int j = 0; j <= items[i].d; ++j ) {
                 t_v remain_p = p-items[i].price*j;
                 if ( remain_p < 0 ) break;
                 
                 t_v sum_cal = dp[i-1][remain_p].first + items[i].cal*j;
+                ++sumCells;
                 if ( dp[i][p].first < sum_cal ) {
                     dp[i][p] = make_pair(sum_cal, j);
                 }
@@ -95,7 +102,32 @@ int main()
         sump -= items[i].price*ans[i];
     }
 
-    cout << "ans value = " << ans_score << endl;
+    time_t end = clock();
+    double duration = double(end-strat);
+    double avgcells = double(sumCells)/items.size();
+    double averaged;
+
+    long long sumofd = 0;
+    long long enough_items=0;
+
+    for ( auto i : items ) {
+        sumofd += i.d;
+        enough_items += (i.d*i.price >= SUMP ) ? 1 : 0;
+    }
+    sumofd *= SUMP; 
+    averaged = double(sumofd)/items.size();
+
+
+    cout << "\r[results]" << endl;
+    cout << "file name\t: " << fpath << endl;
+    cout << "solving\t\t: " << "Simple DP" << endl;
+    cout << "SUMP\t\t: " << SUMP << endl;
+    cout << "items size\t: " << items.size() << endl;
+    printf("echoug items\t: %0.2lf%\n", double(enough_items)/(items.size())*100);
+    printf("averages d\t: %0.2lf\n", averaged);
+    printf("averages cells\t: %0.2lf\n", avgcells);
+    cout << "optimized value\t: " << ans_score << endl; 
+    cout << "time\t\t: " << duration << endl;
 
     long long sum = 0;
     sump = 0;
@@ -104,4 +136,10 @@ int main()
         sump += items[i].price*ans[i];
     }
   
+    cout << endl;
+    // for ( int i = 0; i < items.size(); ++i ) {
+        
+    //     if ( ans[i] == 0 ) continue;
+    //     cout << i << ": " << ans[i] << " (limit:" << items[i].d << ")" << endl;
+    // }
 }

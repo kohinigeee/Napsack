@@ -33,10 +33,32 @@ vector<Item> make() {
     return items;
 }
 
+long long calcelss( t_v sump, vector<Item>& items ) {
+    long long ans = 0;
+    for ( int i = 1; i < items.size(); ++i ) {
+        long long i_cells = 0;
+        Item it = items[i];
+
+        long long maxp = it.price*it.d;
+        long long tmpp = sump;
+
+        if ( tmpp >= maxp ) {
+            i_cells += (it.d+1)*(tmpp-maxp+1); 
+            tmpp = maxp-1;
+        }
+
+        long long a = tmpp/it.price, b = tmpp%it.price;
+        i_cells += it.price*(a*(a+1)/2)+(a+1)*(b+1)-1;
+        ans += i_cells;
+    }
+    return ans;
+}
+
 int main()
 {
     vector<Item> items;
     const t_v SUMP = 13;
+    long long sumcells = 0;
 
     items = make();
 
@@ -49,17 +71,21 @@ int main()
     } 
 
     for ( int i = 1; i < items.size(); ++i ) {
+        long long i_cells = 0;
         for ( t_v p = 1; p <= SUMP; ++p ) {
             for ( int j = 0; j <= items[i].d; ++j ) {
                 t_v remain_p = p-items[i].price*j;
                 if ( remain_p < 0 ) break;
                 
                 t_v sum_cal = dp[i-1][remain_p].first + items[i].cal*j;
+                ++i_cells;
                 if ( dp[i][p].first < sum_cal ) {
                     dp[i][p] = make_pair(sum_cal, j);
                 }
             }
         }
+        cout << i << " celss =" << i_cells << endl;
+        sumcells += i_cells;
     }
 
     t_v ans_score = dp[items.size()-1][SUMP].first;
@@ -72,6 +98,8 @@ int main()
     }
 
     cout << "ans value = " << ans_score << endl;
+    cout << "sum of celss " << sumcells << endl;
+    long long tmp = calcelss(SUMP, items);
 
     long long sum = 0;
     sump = 0;

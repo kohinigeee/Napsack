@@ -1,0 +1,26 @@
+hot_p1_1.dat
+price scale:1 range:10~100
+
+hot_p1_2.dat
+price scale:1  range:100 ~ 1000
+
+hot_p1_3.dat
+price scale:1  range:1000 ~ 10000
+
+hot_p01_1.dat
+price scale:0.1  range:10 ~ 100
+
+hot_p01_2.dat
+price scale:0.1  range:100 ~ 1000
+
+hot_p01_3.dat
+price scale:0.1  range:1000 ~ 100000
+
+hot_p001_1.dat
+price scale:0.01  range:10 ~ 100
+
+hot_p001_2.dat
+price scale:0.01  range:100 ~ 1000
+
+hot_p001_3.dat
+price scale:0.01  range:1000 ~ 10000
