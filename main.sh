@@ -3,13 +3,13 @@
 sump=$1
 fname=$2
 
-proname1="Napseg"
-proname2="NapSimple"
+# pronames=("NapSimple" "Napseg2" "Napseg3")
+# pronames=("Napseg2" "Napseg3")
+pronames=("Napseg3")
 
-g++ "$proname1.cpp" -o "$proname1.exe"
-g++ "$proname2.cpp" -o "$proname2.exe"
-
-./"$proname2.exe" $sump $fname
-echo
-./"$proname1.exe" $sump $fname
-echo
+for name in ${pronames[@]};
+do
+    g++ "$name.cpp" -o "$name.exe"
+    ./"$name.exe" $sump $fname
+    echo
+done

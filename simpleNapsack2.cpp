@@ -26,9 +26,8 @@ vector<Item> make() {
 
     items.push_back(Item(1, 4, 4, 3));
     items.push_back(Item(2, 3, 5, 3));
-    items.push_back(Item(3, 3, 6, 3));
-    items.push_back(Item(4, 3, 7, 3));
-    items.push_back(Item(5, 2, 8, 3));
+    items.push_back(Item(3, 3, 6, 4));
+    items.push_back(Item(4, 3, 7, 2));
 
     return items;
 }
